@@ -1,0 +1,18 @@
+.MainContent {
+  background: #FFFFFF;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+  width: 100%;
+  min-height: calc(100vh - 100px);
+  margin: 0 auto;
+  text-align: center;
+
+  @media only screen and (min-width: 1025px) {
+    margin: 20px auto;
+    min-height: calc(100vh - 90px);
+    width: 1340px;
+  }
+}
+
+.FailurePage {
+  color: red;
+}

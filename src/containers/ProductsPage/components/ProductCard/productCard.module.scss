@@ -1,0 +1,29 @@
+.ProductCard {
+    display: flex;
+    flex-direction: column;
+    width: 360px;
+    min-height: 200px;
+    background: #FFFFFF;
+    border: 1px solid #EFEFEF;
+    box-sizing: border-box;
+    border-radius: 4px;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    line-height: 25px;
+    margin-bottom: 20px;
+
+    img {
+      width: 300px;
+      height: 300px;
+    }
+
+  @media only screen and (min-width: 768px) {
+    width: 420px;
+
+    img {
+      width: 400px;
+      height: 400px;
+    }
+  }
+}
