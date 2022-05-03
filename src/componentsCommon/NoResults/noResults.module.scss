@@ -1,0 +1,14 @@
+.NoResultsImg {
+  width: 200px;
+  height: 200px;
+
+  @media only screen and (min-width: 768px) {
+    width: 250px;
+    height: 250px;
+  }
+}
+
+.NoResults {
+  text-align: center;
+  color: #9D9D9D;
+}

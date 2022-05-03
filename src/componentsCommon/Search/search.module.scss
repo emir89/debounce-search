@@ -1,0 +1,36 @@
+.SearchFieldContainer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+
+  svg {
+    position: relative;
+    top: 38px;
+    left: 15px;
+  }
+
+  @media only screen and (min-device-width: 768px) {
+    width: 100%;
+  }
+}
+
+.Search {
+  margin: 20px 0 0 -20px;
+  width: 80%;
+  border: 1px solid #E6E6E6;
+  border-radius: 4px;
+  height: 50px;
+  outline: none;
+  font-size: 16px;
+  color: #9D9D9D;
+  padding-left: 45px;
+
+  @media only screen and (min-device-width: 768px) {
+    width: 92.3%;
+  }
+
+  &::placeholder {
+    font-size: 16px;
+    color: #9D9D9D;
+  }
+}
