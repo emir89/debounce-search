@@ -1,4 +1,9 @@
-import React, { useState, useRef } from "react";
+import React, {
+  useState,
+  useEffect,
+  ReactComponentElement,
+  SyntheticEvent,
+} from "react";
 import Products from "./components/Products";
 import Search from "../../componentsCommon/Search";
 import FailurePage from "../../componentsCommon/FailurePage";
@@ -9,16 +14,16 @@ import styles from "./components/Products/products.module.scss";
 
 interface AbortController {
   signal: AbortSignal;
-  abort: Function;
+  abort: () => void;
 }
 
 interface Response {
-  json: Function;
+  json: () => Promise<SearchApiData>;
 }
 
 interface AbortSignal {
   aborted: boolean;
-  onabort: null | Function;
+  onabort: any;
 }
 
 interface SearchParam {
@@ -42,7 +47,7 @@ const ProductsPage: React.FC = () => {
   const [apiData, setApiData] = useState<Product[] | null>(null);
   const [isSearchRequestFired, setIsSearchRequestFired] =
     useState<Boolean>(false);
-  const [isGetApiDataFailed, setIsGetApiDataFailed] = useState<Boolean>(false);
+  const [isGetApiDataFailed, setIsGetApiDataFailed] = useState<boolean>(false);
   const [searchParams, setSearchParams] = useState<SearchParam>({
     searchText: "",
     page: 0,
@@ -52,11 +57,11 @@ const ProductsPage: React.FC = () => {
     new AbortController()
   );
 
-  // set request controller ref
-  //const controller = useRef<AbortController>(new AbortController());
+  let timeout: ReturnType<typeof setTimeout>;
 
-  // set timeout ref
-  const timeout = useRef<any>(null);
+  /* useEffect(() => {
+
+  }, []) */
 
   /**
    * Gets api data
@@ -70,11 +75,12 @@ const ProductsPage: React.FC = () => {
     page: number = 0,
     isLoadMore: boolean = false
   ): void {
+    setIsGetApiDataFailed(false);
     fetch("https://latency-dsn.algolia.net/1/indexes/*/queries", {
       signal: controller.signal as any,
       method: "POST",
       headers: {
-        "x-algolia-api-key": "6be0576ff61c053d5f9a3225e2a90f76",
+        "x-algolia-api-key": process.env.REACT_APP_API_KEY as string,
         "x-algolia-application-id": "latency",
       },
       body: JSON.stringify({
@@ -101,16 +107,16 @@ const ProductsPage: React.FC = () => {
           page,
           totalCount: data.results[0].nbHits,
         });
-        clearTimeout(timeout.current);
+        clearTimeout(timeout);
       })
-      .catch((e: any) => {
+      .catch((e: { name: string }) => {
         console.warn(e);
         setIsSearchRequestFired(false);
 
         if (e.name !== "AbortError") {
           setIsGetApiDataFailed(true);
         }
-        clearTimeout(timeout.current);
+        clearTimeout(timeout);
       });
   }
 
@@ -136,8 +142,8 @@ const ProductsPage: React.FC = () => {
       setController(new AbortController());
     }
     // clear existing request timeout
-    if (timeout.current) {
-      clearTimeout(timeout.current);
+    if (timeout) {
+      clearTimeout(timeout);
     }
     // when search text empty, reset data
     if (!searchText.length) {
@@ -145,11 +151,11 @@ const ProductsPage: React.FC = () => {
       return;
     }
     // set new request timeout
-    timeout.current = setTimeout(() => {
+    timeout = setTimeout(() => {
       getApiData(searchText);
       setApiData(null);
       setIsSearchRequestFired(true);
-    }, 200);
+    }, 1000);
   }
 
   return (
